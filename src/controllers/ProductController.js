@@ -8,14 +8,14 @@ const createErrorResponse = (res, status, message) => {
 };
 
 const createProduct = async (req, res) => {
+  const { name, image, type, countInStock, price, rating, description } =
+    req.body;
+
+  if (!name || !image || !type || !countInStock || !price || !rating) {
+    return createErrorResponse(res, 200, "All input fields are required");
+  }
+
   try {
-    const { name, image, type, countInStock, price, rating, description } =
-      req.body;
-
-    if (!name || !image || !type || !countInStock || !price || !rating) {
-      return createErrorResponse(res, 200, "All input fields are required");
-    }
-
     const response = await ProductService.createProduct(req.body);
     return res.status(200).json(response);
   } catch (e) {
@@ -24,10 +24,10 @@ const createProduct = async (req, res) => {
 };
 
 const updateProduct = async (req, res) => {
-  try {
-    const productId = req.params.id;
-    const data = req.body;
+  const productId = req.params.id;
+  const data = req.body;
 
+  try {
     const response = await ProductService.updateProduct(productId, data);
     return res.status(200).json(response);
   } catch (e) {
@@ -36,9 +36,9 @@ const updateProduct = async (req, res) => {
 };
 
 const getDetailsProduct = async (req, res) => {
-  try {
-    const productId = req.params.id;
+  const productId = req.params.id;
 
+  try {
     const response = await ProductService.getDetailsProduct(productId);
     return res.status(200).json(response);
   } catch (e) {
@@ -47,9 +47,9 @@ const getDetailsProduct = async (req, res) => {
 };
 
 const deleteProduct = async (req, res) => {
-  try {
-    const productId = req.params.id;
+  const productId = req.params.id;
 
+  try {
     const response = await ProductService.deleteProduct(productId);
     return res.status(200).json(response);
   } catch (e) {
@@ -58,8 +58,13 @@ const deleteProduct = async (req, res) => {
 };
 
 const getAllProduct = async (req, res) => {
+  const { limit, page } = req.query;
+
   try {
-    const response = await ProductService.getAllProduct();
+    const response = await ProductService.getAllProduct(
+      Number(limit),
+      Number(page)
+    );
     return res.status(200).json(response);
   } catch (e) {
     return createErrorResponse(res, 404, e);
