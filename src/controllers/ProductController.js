@@ -8,18 +8,17 @@ const createErrorResponse = (res, status, message) => {
 };
 
 const createProduct = async (req, res) => {
-  const { name, image, type, countInStock, price, rating, description } =
-    req.body;
+  const { name, image, type, countInStock, price, rating } = req.body;
 
   if (!name || !image || !type || !countInStock || !price || !rating) {
-    return createErrorResponse(res, 200, "All input fields are required");
+    return createErrorResponse(res, 400, "All input fields are required");
   }
 
   try {
     const response = await ProductService.createProduct(req.body);
-    return res.status(200).json(response);
-  } catch (e) {
-    return createErrorResponse(res, 404, e);
+    return res.status(201).json(response);
+  } catch (error) {
+    return createErrorResponse(res, 500, error.message);
   }
 };
 
@@ -30,8 +29,8 @@ const updateProduct = async (req, res) => {
   try {
     const response = await ProductService.updateProduct(productId, data);
     return res.status(200).json(response);
-  } catch (e) {
-    return createErrorResponse(res, 404, e);
+  } catch (error) {
+    return createErrorResponse(res, 500, error.message);
   }
 };
 
@@ -41,8 +40,8 @@ const getDetailsProduct = async (req, res) => {
   try {
     const response = await ProductService.getDetailsProduct(productId);
     return res.status(200).json(response);
-  } catch (e) {
-    return createErrorResponse(res, 404, e);
+  } catch (error) {
+    return createErrorResponse(res, 500, error.message);
   }
 };
 
@@ -52,22 +51,23 @@ const deleteProduct = async (req, res) => {
   try {
     const response = await ProductService.deleteProduct(productId);
     return res.status(200).json(response);
-  } catch (e) {
-    return createErrorResponse(res, 404, e);
+  } catch (error) {
+    return createErrorResponse(res, 500, error.message);
   }
 };
 
 const getAllProduct = async (req, res) => {
-  const { limit, page } = req.query;
-
   try {
+    const { limit = 10, page = 0, sort, filter } = req.query;
     const response = await ProductService.getAllProduct(
       Number(limit),
-      Number(page)
+      Number(page),
+      sort,
+      filter
     );
     return res.status(200).json(response);
-  } catch (e) {
-    return createErrorResponse(res, 404, e);
+  } catch (error) {
+    return createErrorResponse(res, 500, error.message);
   }
 };
 
