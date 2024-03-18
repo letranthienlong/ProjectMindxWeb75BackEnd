@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 const { generateAccessToken, generateRefreshToken } = require("./JwtService");
 
 const createUser = async (newUser) => {
-  const { name, email, password, confirmPassword, phone } = newUser;
+  const { email, password } = newUser;
   try {
     const checkUser = await User.findOne({ email: email });
     if (checkUser !== null) {
@@ -15,10 +15,8 @@ const createUser = async (newUser) => {
 
     const hash = bcrypt.hashSync(password, 10);
     const createdUser = await User.create({
-      name,
       email,
       password: hash,
-      phone,
     });
 
     return {
