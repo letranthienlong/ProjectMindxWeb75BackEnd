@@ -1,25 +1,14 @@
 const express = require("express");
-const router = express.Router();
-const {
-  createUser,
-  loginUser,
-  updateUser,
-  deleteUser,
-  getAllUser,
-  getDetailsUser,
-  refreshToken,
-} = require("../controllers/UserController");
-const {
-  authMiddleware,
-  authUserMiddleware,
-} = require("../middleware/authMiddleware");
+const router = express.Router()
+const userController = require('../controllers/UserController');
+const { authMiddleWare, authUserMiddleWare } = require("../middleware/authMiddleware");
 
-router.post("/register", createUser);
-router.post("/login", loginUser);
-router.put("/edit/:id", updateUser);
-router.delete("/delete/:id", authMiddleware, deleteUser);
-router.get("/list", authMiddleware, getAllUser);
-router.get("/info/:id", authUserMiddleware, getDetailsUser);
-router.post("/refresh", refreshToken);
+router.post('/sign-up', userController.createUser)
+router.post('/sign-in', userController.loginUser)
+router.put('/update-user/:id', userController.updateUser)
+router.delete('/delete-user/:id', authMiddleWare, userController.deleteUser)
+router.get('/getAll', authMiddleWare, userController.getAllUser)
+router.get('/get-details/:id', authUserMiddleWare, userController.getDetailsUser)
+router.post('/refresh-token', userController.refreshToken)
 
-module.exports = router;
+module.exports = router
