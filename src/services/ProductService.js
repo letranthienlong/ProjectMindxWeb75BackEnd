@@ -6,7 +6,7 @@ const createProduct = async (newProduct) => {
   const checkProduct = await Product.exists({ name: name });
   if (checkProduct) {
     return {
-      status: "OK",
+      status: "ERR",
       message: "The product name already exists",
     };
   }
@@ -24,8 +24,8 @@ const updateProduct = async (id, data) => {
   const checkProduct = await Product.exists({ _id: id });
   if (!checkProduct) {
     return {
-      status: "OK",
-      message: "The product is not defined",
+      status: "ERR",
+      message: "The product is not exists",
     };
   }
 
@@ -44,8 +44,8 @@ const deleteProduct = async (id) => {
   const checkProduct = await Product.exists({ _id: id });
   if (!checkProduct) {
     return {
-      status: "OK",
-      message: "The product is not defined",
+      status: "ERR",
+      message: "The product is not exists",
     };
   }
 
@@ -61,7 +61,7 @@ const getDetailsProduct = async (id) => {
   const product = await Product.findById(id);
   if (!product) {
     return {
-      status: "OK",
+      status: "ERR",
       message: "The product is not defined",
     };
   }

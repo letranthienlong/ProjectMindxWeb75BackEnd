@@ -8,7 +8,7 @@ const createUser = async (newUser) => {
     const checkUser = await User.findOne({ email: email });
     if (checkUser !== null) {
       return {
-        status: "OK",
+        status: "ERR",
         message: "The email is already registered",
       };
     }
@@ -35,7 +35,7 @@ const loginUser = async (userLogin) => {
     const checkUser = await User.findOne({ email: email });
     if (checkUser === null) {
       return {
-        status: "OK",
+        status: "ERR",
         message: "User not found",
       };
     }
@@ -43,7 +43,7 @@ const loginUser = async (userLogin) => {
     const comparePassword = bcrypt.compareSync(password, checkUser.password);
     if (!comparePassword) {
       return {
-        status: "OK",
+        status: "ERR",
         message: "Incorrect password",
       };
     }
@@ -74,7 +74,7 @@ const updateUser = async (id, data) => {
     const updatedUser = await User.findByIdAndUpdate(id, data, { new: true });
     if (!updatedUser) {
       return {
-        status: "OK",
+        status: "ERR",
         message: "User not found",
       };
     }
@@ -94,7 +94,7 @@ const deleteUser = async (id) => {
     const deletedUser = await User.findByIdAndDelete(id);
     if (!deletedUser) {
       return {
-        status: "OK",
+        status: "ERR",
         message: "User not found",
       };
     }
@@ -126,7 +126,7 @@ const getDetailsUser = async (id) => {
     const user = await User.findById(id);
     if (!user) {
       return {
-        status: "OK",
+        status: "ERR",
         message: "User not found",
       };
     }
